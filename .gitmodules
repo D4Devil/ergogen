@@ -1,0 +1,3 @@
+[submodule "ergogen-gui"]
+	path = ergogen-gui
+	url = https://github.com/MvEerd/ergogen-gui.git

@@ -116,6 +116,7 @@ pcbs:
       mcu:
         what: promicro
         params:
+          type: nicenano
           orientation: "down"
         where:
           ref.aggregate.parts: [matrix_index_commands_number, matrix_index_commands_home]

@@ -12,7 +12,8 @@
     "scripts": {
         "build": "rollup -c",
         "test": "mocha -r test/helpers/register test/index.js",
-        "coverage": "nyc --reporter=html --reporter=text npm test"
+        "coverage": "nyc --reporter=html --reporter=text npm test",
+        "build-kicad": "node src/cli.js ./layouts/stagg/stagg.yaml -o ./layouts/stagg/"
     },
     "dependencies": {
         "fs-extra": "^11.1.0",
