@@ -1,0 +1,153 @@
+units:
+  step: .5U
+  wrist_tilt: -15
+  board_offset: 1.75
+  
+points:
+  zones:
+    matrix:
+      anchor:
+        # Kikad shift
+        shift: [30, -130]
+        rotate: wrist_tilt
+      key.stagger: step
+      columns:
+        pinkie_commands:
+          rows.bottom.skip: true
+        pinky:
+        ring:
+        middle:
+        index_0:
+          key.stagger: -step
+        index_1:
+          key.stagger: -step
+        index_commands:
+          rows.bottom.skip: true
+          key.stagger: -step
+      rows:
+        bottom:
+        home:
+        top:
+        number:
+
+    thumb_cluster:
+      anchor:
+        ref: matrix_index_commands_bottom
+        shift: [1U, -1U]
+        rotate: -45
+      columns:
+        left:
+        right:
+      rows:
+        bottom:
+        top:
+      
+  mirror:
+    ref: thumb_cluster_right_top
+    distance: 2U
+
+outlines:
+  board:
+    - what: rectangle
+      where: true
+      size: [U+board_offset, U+board_offset]
+      fillet: 2
+
+    - what: polygon
+      points:
+        - ref: matrix_index_commands_number
+          shift: [0, -.1U]
+        - ref: matrix_index_commands_number
+          shift: [1.5U, -.1U]
+        - ref: matrix_index_commands_number
+          shift: [1.5U, -2.3U]
+        - ref: matrix_index_commands_number
+          shift: [-1.5U, -2.3U]
+      fillet: 2
+      
+  keys:
+    - what: rectangle
+      where: true
+      size: [U-.5, U-.5]
+
+  combo:
+    - name: board
+    - operation: stack
+      name: keys
+
+pcbs:
+  v1:
+    outlines:
+      main:
+        outline: board
+
+    footprints:
+      mx_hotswap:
+        what: mx
+        where: -matrix_index_commands_number
+        params:
+          hotswap: true
+          reverse: true
+          keycaps: true
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+
+      rotary_encoder:
+        what: rotary
+        where: matrix_index_commands_number
+        params:
+          from: ""
+          to: ""
+          A: P1
+          B: GND
+          C: P2
+        adjust:
+          rotate: 90
+          
+      diodes:
+        what: diode
+        where: -matrix_index_commands_number
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [0, -5]
+
+      mcu:
+        what: promicro
+        params:
+          orientation: "down"
+        where:
+          ref.aggregate.parts: [matrix_index_commands_number, matrix_index_commands_home]
+          shift: [U, 0]
+          rotate: -90    
+
+      oled:
+        what: oled
+        params:
+          side: "F"
+          SDA: P2
+          SCL: P3
+        where:
+          ref.aggregate.parts: [matrix_index_commands_number, matrix_index_commands_home]
+          shift: [0.68*U, -U]
+          rotate: 90
+
+      reset:
+        what: button
+        params:
+          from: GND
+          to: RST
+        where:
+          ref.aggregate.parts: [matrix_index_commands_number, matrix_index_commands_home]
+          shift: [0.75*U, -1.15*U]
+
+      battery:
+        what: jstph
+        where:
+          ref: matrix_index_commands_home
+          shift: [U,-.1U]
+          rotate: -90
+        params:
+          pos: ""
+          neg: GND
